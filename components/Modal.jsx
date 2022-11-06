@@ -70,11 +70,14 @@ const Modal = ({ onRequestClose,pathName }) => {
 
 async function connectWallet(){
   
-  const provider = await web3Modal.connect();
-  const web3 = new Web3(provider);
-  const Account = await web3.eth.getAccounts();
- setcurrentAccount(Account[0]);
-  console.log(currentAccount);
+  // const provider = await web3Modal.connect();
+  // const web3 = new Web3(provider);
+  // const Account = await web3.eth.getAccounts();
+  const resp = await fetch('https://mainnet.aeternity.io/v3/key-blocks/current');
+  const result = await resp.json();
+  console.log(result.beneficiary)
+ setcurrentAccount(result.beneficiary);
+  // console.log(currentAccount);
   setWalletConnected(true)
 }
 
@@ -91,13 +94,13 @@ async function connectWallet(){
 
   };
 
-  // const handleSubmitWallet = () => {
-  //   connectWallet();
-  //   console.log(currentAccount);
-  //   currentAccount === ""
-  //     ? setWalletConnected(false)
-  //     : setWalletConnected(true);
-  // };
+  const handleSubmitWallet = () => {
+    connectWallet();
+    console.log(currentAccount);
+    currentAccount === ""
+      ? setWalletConnected(false)
+      : setWalletConnected(true);
+  };
 
   const wrapperRef = useRef(null);
   const onDragEnter = () => wrapperRef.current.classList.add("dragover");
